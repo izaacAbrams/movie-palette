@@ -1,0 +1,31 @@
+
+.hidden {
+    display: none;
+}
+
+.selected {
+    width: 100%;
+}
+.ul-results {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.result-li img{
+    height: 300px;
+
+}
+
+.result-li {
+    list-style: none;
+    margin: 20px;
+    display: flex;
+}
+
+.no-poster {
+    background-color: #232323;
+    color: white;
+    font-size: 32px;
+    height: 300px;
+    width: 200px;
+}
