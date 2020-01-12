@@ -43,7 +43,7 @@ function displaySearch(responseJson){
             <section class="title-details hidden">
             <h2 class="list-title">${responseJson.results[i].original_title}</h2>
             <p class="list-description">${responseJson.results[i].overview}</p>
-            <button type="submit">Find Similar?</button>
+            <button type="submit" class="similar-submit">Find Similar?</button>
             </section></li>`
         )
         if(responseJson.results[i].poster_path === null) {
@@ -70,10 +70,28 @@ function watchResults(){
             $('.title-details', this).removeClass('hidden')
         }
         const titleId = $(this).attr('id');
-        getSimilar(titleId);
+        $('.similar-submit').on('click', function(e){
+          e.preventDefault();
+          getSimilar(titleId);  
+        })
+        
     })
-
-
-    
 }
+
+function getSimilar(titleId){
+    const url = "https://api.themoviedb.org/3/movie/";
+    const movieId = `${titleId}/similar`;
+    const params = {
+        "api_key": tmdbApi,
+        "lang": "en-US",
+        "page": "1"
+    }
+
+    const fullUrl = url + movieId + '?' + tmdbFullUrl(params); 
+
+    fetch(fullUrl)
+    .then(response => response.json())
+    .then(responseJson => displaySearch(responseJson));
+}
+
 $(watchForm);
