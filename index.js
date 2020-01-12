@@ -1,19 +1,19 @@
 "use strict";
 
 const tmdbApi = "85a0dacfff0d08f1c3713be131c6cb65";
+const utellyKey = 'b13b17d0cemsh83f578cce0d1efcp1a073cjsn3e03ae9e5d9f';
 
 function watchForm(){
     $('form').submit(e => {
         e.preventDefault();
-        console.log("submit working");
         let userInput = $('.form-input').val();
         console.log(userInput);
         getTitles(userInput);
     })
 }
-function tmdbFullUrl(params) {
+function makeFullUrl(params) {
     const queryItems = Object.keys(params)
-    .map(key => `${key}=${params[key]}`)
+    .map(key => `${encodeURIComponent(key)}=${params[encodeURIComponent(key)]}`)
     return queryItems.join('&')
 }
 
@@ -25,7 +25,7 @@ function getTitles(userInput){
         "lang": "en-US",
         "page": "1"
     }
-    const formatParams = tmdbFullUrl(params);
+    const formatParams = makeFullUrl(params);
     const fullUrl = url + '?' + formatParams;
 
     fetch(fullUrl)
@@ -53,6 +53,7 @@ function displaySearch(responseJson){
                 `<h2 class="no-poster-title">${responseJson.results[i].original_title}</h2>`
             );
         }
+
     }
         watchResults();
 }
@@ -62,19 +63,19 @@ function watchResults(){
             $('.result-li').removeClass('selected');
             $('.title-details').addClass('hidden');
             $(this).addClass('selected');
-            $('.title-details', this).removeClass('hidden')
+            $('.title-details', this).removeClass('hidden');
+            getPlatforms();
             
         }else{
             $(this).addClass('selected');
-
-            $('.title-details', this).removeClass('hidden')
+            $('.title-details', this).removeClass('hidden');
+            getPlatforms();
         }
         const titleId = $(this).attr('id');
         $('.similar-submit').on('click', function(e){
           e.preventDefault();
           getSimilar(titleId);  
         })
-        
     })
 }
 
@@ -87,11 +88,44 @@ function getSimilar(titleId){
         "page": "1"
     }
 
-    const fullUrl = url + movieId + '?' + tmdbFullUrl(params); 
+    const fullUrl = url + movieId + '?' + makeFullUrl(params); 
 
     fetch(fullUrl)
     .then(response => response.json())
     .then(responseJson => displaySearch(responseJson));
+}
+
+function getPlatforms(){
+    const currentTitle = $('.selected > section > .list-title').text();
+    console.log(currentTitle);
+    const baseUrl = 'https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup';
+    const options = {
+        headers: new Headers({
+            'X-RapidAPI-Key': utellyKey})
+    };
+    const params = {
+        'term': currentTitle,
+        'country': 'us'
+    }
+    const utellyUrl = baseUrl + '?' + makeFullUrl(params);
+
+    fetch(utellyUrl, options)
+    .then(response => response.json())
+    .then(responseJson => showPlatforms(responseJson, currentTitle));
+}
+
+function showPlatforms(responseJson, currentTitle){
+    console.log(responseJson);
+    for(let i = 0; i < responseJson.results.length; i++){
+        if(responseJson.results[i].name === currentTitle){
+            console.log(responseJson.results[i]);
+            const titleResults = responseJson.results[i];
+            for(let d = 0; d < responseJson.results[i].locations.length; d++){
+            $('.title-details').append(`
+            <img src="${titleResults.locations[d].icon}" alt="${titleResults.locations[d].display_name}" class="platform-logo">`)
+        }
+    }
+    }
 }
 
 $(watchForm);
