@@ -2,7 +2,6 @@
 
 const tmdbApi = "85a0dacfff0d08f1c3713be131c6cb65";
 const utellyKey = 'b13b17d0cemsh83f578cce0d1efcp1a073cjsn3e03ae9e5d9f';
-
 function watchForm(){
     $('form').submit(e => {
         e.preventDefault();
@@ -18,7 +17,8 @@ function makeFullUrl(params) {
 }
 
 function getTitles(userInput){
-    const url = "https://api.themoviedb.org/3/search/movie";
+    const mUrl = "https://api.themoviedb.org/3/search/movie";
+    // const tUrl = "https://api.themoviedb.org/3/search/tv";
     const params = {
         "api_key": tmdbApi,
         "query": userInput,
@@ -26,11 +26,16 @@ function getTitles(userInput){
         "page": "1"
     }
     const formatParams = makeFullUrl(params);
-    const fullUrl = url + '?' + formatParams;
+    const movieUrl = mUrl + '?' + formatParams;
+    // const tvUrl = tUrl + '?' + formatParams;
 
-    fetch(fullUrl)
+    fetch(movieUrl)
     .then(response => response.json())
-    .then(responseJson => displaySearch(responseJson))
+    .then(responseJson => displaySearch(responseJson));
+
+    // fetch(tvUrl)
+    // .then(response => response.json())
+    // .then(responseJson => displaySearch(responseJson));
 }
 
 function displaySearch(responseJson){
@@ -44,6 +49,7 @@ function displaySearch(responseJson){
             <h2 class="list-title">${responseJson.results[i].original_title}</h2>
             <p class="list-description">${responseJson.results[i].overview}</p>
             <button type="submit" class="similar-submit">Find Similar?</button>
+            <div class="video-section"></div>
             </section></li>`
         )
         if(responseJson.results[i].poster_path === null) {
@@ -81,6 +87,7 @@ function watchResults(){
 
 function getSimilar(titleId){
     const url = "https://api.themoviedb.org/3/movie/";
+    // const tvUrl = 'https://api.themoviedb.org/3/tv/';
     const movieId = `${titleId}/similar`;
     const params = {
         "api_key": tmdbApi,
@@ -89,43 +96,72 @@ function getSimilar(titleId){
     }
 
     const fullUrl = url + movieId + '?' + makeFullUrl(params); 
+    // const fullTvUrl = tvUrl + movieId + '?' + makeFullUrl(params);
 
     fetch(fullUrl)
     .then(response => response.json())
     .then(responseJson => displaySearch(responseJson));
+
+    // fetch(fullTvUrl)
+    // .then(response => response.json())
+    // .then(responseJson => displaySearch(responseJson));
 }
 
 function getPlatforms(){
-    const currentTitle = $('.selected > section > .list-title').text();
-    console.log(currentTitle);
-    const baseUrl = 'https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup';
-    const options = {
-        headers: new Headers({
-            'X-RapidAPI-Key': utellyKey})
-    };
-    const params = {
-        'term': currentTitle,
-        'country': 'us'
-    }
-    const utellyUrl = baseUrl + '?' + makeFullUrl(params);
+    // const currentTitle = $('.selected > section > .list-title').text();
+    // console.log(currentTitle);
+    // const baseUrl = 'https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup';
+    // const options = {
+    //     headers: new Headers({
+    //         'X-RapidAPI-Key': utellyKey})
+    // };
+    // const params = {
+    //     'term': currentTitle,
+    //     'country': 'us'
+    // }
+    // const utellyUrl = baseUrl + '?' + makeFullUrl(params);
 
-    fetch(utellyUrl, options)
+    // fetch(utellyUrl, options)
+    // .then(response => response.json())
+    // .then(responseJson => showPlatforms(responseJson, currentTitle));
+    const currentId = $('.selected').attr('id');
+    const baseUrl = `https://api.themoviedb.org/3/movie/${currentId}/videos`;
+    const params = {
+        'api_key': tmdbApi,
+        'language': 'en-US'
+    }
+    const videoLinkUrl = baseUrl + '?' + makeFullUrl(params);
+    fetch(videoLinkUrl)
     .then(response => response.json())
-    .then(responseJson => showPlatforms(responseJson, currentTitle));
+    .then(responseJson => showPlatforms(responseJson));
 }
 
-function showPlatforms(responseJson, currentTitle){
+function showPlatforms(responseJson){
     console.log(responseJson);
-    for(let i = 0; i < responseJson.results.length; i++){
-        if(responseJson.results[i].name === currentTitle){
-            console.log(responseJson.results[i]);
-            const titleResults = responseJson.results[i];
-            for(let d = 0; d < responseJson.results[i].locations.length; d++){
-            $('.title-details').append(`
-            <img src="${titleResults.locations[d].icon}" alt="${titleResults.locations[d].display_name}" class="platform-logo">`)
+    $('.video-section').empty();
+    // for(let i = 0; i < responseJson.results.length; i++){
+        console.log(responseJson.results[0].key);
+        if(responseJson.results[0].type === "Trailer"){
+        const videoId = responseJson.results[0].key;
+        $('.video-section').append(`
+        <iframe width="340" height="160" src="https://www.youtube-nocookie.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`);
         }
-    }
-    }
+    // }
+    
+    // for(let i = 0; i < responseJson.results.length; i++){
+    //     if(responseJson.results[i].name === currentTitle){
+    //         console.log(responseJson.results[i]);
+    //         const titleResults = responseJson.results[i];
+
+    //         for(let d = 0; d < responseJson.results[0].locations.length; d++){
+    //             $('.platforms').append(`
+    //             <a href="${titleResults.locations[d].url}" target="_blank">
+    //             <img src="${titleResults.locations[d].icon}" alt="${titleResults.locations[d].display_name}" class="platform-logo">
+    //             </a>`);
+    //         }
+    //     }
+    // }
+   
 }
 
 $(watchForm);
