@@ -1,7 +1,38 @@
 "use strict";
 
 const tmdbApi = "85a0dacfff0d08f1c3713be131c6cb65";
-const utellyKey = 'b13b17d0cemsh83f578cce0d1efcp1a073cjsn3e03ae9e5d9f';
+
+function getTrending(){
+    const url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${tmdbApi}`
+    fetch(url)
+    .then(response => response.json())
+    .then(responseJson => displayTrending(responseJson));
+
+}
+
+function displayTrending(responseJson){
+    for(let i=0; i < responseJson.results.length; i++){
+        $('.ul-results').append(
+            `<li class="result-li item${i}" id="${responseJson.results[i].id}">
+            <img src="https://image.tmdb.org/t/p/original${responseJson.results[i].poster_path}">
+            <section class="title-details hidden">
+            <h2 class="list-title">${responseJson.results[i].original_title}</h2>
+            <p class="list-description">${responseJson.results[i].overview}</p>
+            <button type="submit" class="similar-submit">Find Similar?</button>
+            <div class="video-section"></div>
+            </section></li>`
+        )
+        if(responseJson.results[i].poster_path === null) {
+            $(`.item${i}`).addClass('no-poster');
+            $(`.item${i}`).empty();
+            $(`.item${i}`).append(
+                `<h2 class="no-poster-title">${responseJson.results[i].original_title}</h2>`
+            );
+        }
+
+    }
+
+}
 function watchForm(){
     $('form').submit(e => {
         e.preventDefault();
@@ -126,14 +157,20 @@ function getPlatforms(){
     // .then(responseJson => showPlatforms(responseJson, currentTitle));
     const currentId = $('.selected').attr('id');
     const baseUrl = `https://api.themoviedb.org/3/movie/${currentId}/videos`;
+    // const baseTvUrl = `https://api.themoviedb.org/3/tv/${currentId}/videos`
     const params = {
         'api_key': tmdbApi,
         'language': 'en-US'
     }
     const videoLinkUrl = baseUrl + '?' + makeFullUrl(params);
+    // const fullTvUrl = baseTvUrl + '?' + makeFullUrl(params);
     fetch(videoLinkUrl)
     .then(response => response.json())
     .then(responseJson => showPlatforms(responseJson));
+
+    // fetch(full)
+    // .then(response => response.json())
+    // .then(responseJson => showPlatforms(responseJson));
 }
 
 function showPlatforms(responseJson){
@@ -164,4 +201,6 @@ function showPlatforms(responseJson){
    
 }
 
-$(watchForm);
+$(watchForm(), 
+getTrending()
+);
