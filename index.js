@@ -1,6 +1,7 @@
 "use strict";
 
 const tmdbApi = "85a0dacfff0d08f1c3713be131c6cb65";
+const rapidApiKey = "b13b17d0cemsh83f578cce0d1efcp1a073cjsn3e03ae9e5d9f";
 
 function getTrending(){
     const url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${tmdbApi}`
@@ -81,6 +82,8 @@ function displaySearch(responseJson){
             <p class="list-description">${responseJson.results[i].overview}</p>
             <button type="submit" class="similar-submit">Find Similar?</button>
             <div class="video-section"></div>
+            </section>
+            <section class="color-palette">
             </section></li>`
         )
         if(responseJson.results[i].poster_path === null) {
@@ -102,11 +105,13 @@ function watchResults(){
             $(this).addClass('selected');
             $('.title-details', this).removeClass('hidden');
             getPlatforms();
+            getColors();
             
         }else{
             $(this).addClass('selected');
             $('.title-details', this).removeClass('hidden');
             getPlatforms();
+            getColors();
         }
         const titleId = $(this).attr('id');
         $('.similar-submit').on('click', function(e){
@@ -200,6 +205,33 @@ function showPlatforms(responseJson){
     // }
    
 }
+
+function getColors() {
+    const options = {
+            headers: new Headers({
+                'x-rapidapi-key': rapidApiKey,
+                'X-rapidapi-host': "apicloud-colortag.p.rapidapi.com"})
+        };
+        const url = 'https://apicloud-colortag.p.rapidapi.com/tag-url.json';
+        const currrentImgUrl = $('.selected > img').attr('src');
+        const params = {
+            'url': currrentImgUrl,
+            'palette': 'w3c'
+        }
+        const fullUrl = url + '?' + makeFullUrl(params);
+        fetch(fullUrl, options)
+        .then(response => response.json())
+        .then(responseJson => showColors(responseJson));
+}
+
+function showColors(responseJson){
+    console.log(responseJson)
+    $('.color-palette').empty();
+    for(let i=0; i < 6; i++)
+    $('.selected > .color-palette').append(`
+    <div class="color-palette-item" style="background-color:${responseJson.tags[i].color}"></div>`)
+}
+
 
 $(watchForm(), 
 getTrending()

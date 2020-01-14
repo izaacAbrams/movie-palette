@@ -33,3 +33,13 @@
 img.platform-logo {
     height: 30px;
 }
+
+.color-palette-item {
+    width: 100px;
+    height: 300px;
+
+}
+
+.color-palette {
+    display: flex;
+}
