@@ -68,9 +68,18 @@ img.platform-logo {
     float: right;
     font-size: 28px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .title-content { 
     display: flex;
     flex-direction: column;
+}
+
+.form-input {
+    height: 50px;
+    width: 400px;
+    margin: 100px;
+    border-radius: 10px 0 0 10px;
+    border: 1px solid black;
 }
