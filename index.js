@@ -7,33 +7,9 @@ function getTrending(){
     const url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${tmdbApi}`
     fetch(url)
     .then(response => response.json())
-    .then(responseJson => displayTrending(responseJson));
-
+    .then(responseJson => displaySearch(responseJson));
 }
 
-function displayTrending(responseJson){
-    for(let i=0; i < responseJson.results.length; i++){
-        $('.ul-results').append(
-            `<li class="result-li item${i}" id="${responseJson.results[i].id}">
-            <img src="https://image.tmdb.org/t/p/original${responseJson.results[i].poster_path}">
-            <section class="title-details hidden">
-            <h2 class="list-title">${responseJson.results[i].original_title}</h2>
-            <p class="list-description">${responseJson.results[i].overview}</p>
-            <button type="submit" class="similar-submit">Find Similar?</button>
-            <div class="video-section"></div>
-            </section></li>`
-        )
-        if(responseJson.results[i].poster_path === null) {
-            $(`.item${i}`).addClass('no-poster');
-            $(`.item${i}`).empty();
-            $(`.item${i}`).append(
-                `<h2 class="no-poster-title">${responseJson.results[i].original_title}</h2>`
-            );
-        }
-
-    }
-
-}
 function watchForm(){
     $('form').submit(e => {
         e.preventDefault();
@@ -45,12 +21,11 @@ function watchForm(){
 function makeFullUrl(params) {
     const queryItems = Object.keys(params)
     .map(key => `${encodeURIComponent(key)}=${params[encodeURIComponent(key)]}`)
-    return queryItems.join('&')
+    return queryItems.join('&');
 }
 
 function getTitles(userInput){
     const mUrl = "https://api.themoviedb.org/3/search/movie";
-    // const tUrl = "https://api.themoviedb.org/3/search/tv";
     const params = {
         "api_key": tmdbApi,
         "query": userInput,
@@ -59,15 +34,10 @@ function getTitles(userInput){
     }
     const formatParams = makeFullUrl(params);
     const movieUrl = mUrl + '?' + formatParams;
-    // const tvUrl = tUrl + '?' + formatParams;
-
+    
     fetch(movieUrl)
     .then(response => response.json())
     .then(responseJson => displaySearch(responseJson));
-
-    // fetch(tvUrl)
-    // .then(response => response.json())
-    // .then(responseJson => displaySearch(responseJson));
 }
 
 function displaySearch(responseJson){
@@ -77,21 +47,16 @@ function displaySearch(responseJson){
         $('.ul-results').append(
             `<li class="result-li item${i}" id="${responseJson.results[i].id}">
             <img src="https://image.tmdb.org/t/p/original${responseJson.results[i].poster_path}">
-            <section class="title-details hidden">
+            <div class="title-content"><section class="title-details hidden">
             <h2 class="list-title">${responseJson.results[i].original_title}</h2>
             <p class="list-description">${responseJson.results[i].overview}</p>
             <button type="submit" class="similar-submit">Find Similar?</button>
-            <div class="video-section"></div>
             </section>
             <section class="color-palette">
-            </section></li>`
+            </section></div></li>`
         )
         if(responseJson.results[i].poster_path === null) {
-            $(`.item${i}`).addClass('no-poster');
-            $(`.item${i}`).empty();
-            $(`.item${i}`).append(
-                `<h2 class="no-poster-title">${responseJson.results[i].original_title}</h2>`
-            );
+            $(`.item${i}`).hide();
         }
 
     }
@@ -102,15 +67,18 @@ function watchResults(){
         if($('.result-li').hasClass('selected') === true){
             $('.result-li').removeClass('selected');
             $('.title-details').addClass('hidden');
-            $(this).addClass('selected');
+            $(this).addClass('selected modal-content');
+            $(this).wrap('<div class="modal"></div>')
+            $(this).addClass('modal-content');
+            $(this).prepend('<span class="close">&times;</span>');
             $('.title-details', this).removeClass('hidden');
-            getPlatforms();
             getColors();
             
         }else{
-            $(this).addClass('selected');
+            $(this).addClass('selected modal-content');
+            $(this).wrap('<div class="modal"></div>')
+            $(this).prepend('<span class="close">&times;</span>');
             $('.title-details', this).removeClass('hidden');
-            getPlatforms();
             getColors();
         }
         const titleId = $(this).attr('id');
@@ -123,7 +91,6 @@ function watchResults(){
 
 function getSimilar(titleId){
     const url = "https://api.themoviedb.org/3/movie/";
-    // const tvUrl = 'https://api.themoviedb.org/3/tv/';
     const movieId = `${titleId}/similar`;
     const params = {
         "api_key": tmdbApi,
@@ -132,78 +99,10 @@ function getSimilar(titleId){
     }
 
     const fullUrl = url + movieId + '?' + makeFullUrl(params); 
-    // const fullTvUrl = tvUrl + movieId + '?' + makeFullUrl(params);
 
     fetch(fullUrl)
     .then(response => response.json())
     .then(responseJson => displaySearch(responseJson));
-
-    // fetch(fullTvUrl)
-    // .then(response => response.json())
-    // .then(responseJson => displaySearch(responseJson));
-}
-
-function getPlatforms(){
-    // const currentTitle = $('.selected > section > .list-title').text();
-    // console.log(currentTitle);
-    // const baseUrl = 'https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup';
-    // const options = {
-    //     headers: new Headers({
-    //         'X-RapidAPI-Key': utellyKey})
-    // };
-    // const params = {
-    //     'term': currentTitle,
-    //     'country': 'us'
-    // }
-    // const utellyUrl = baseUrl + '?' + makeFullUrl(params);
-
-    // fetch(utellyUrl, options)
-    // .then(response => response.json())
-    // .then(responseJson => showPlatforms(responseJson, currentTitle));
-    const currentId = $('.selected').attr('id');
-    const baseUrl = `https://api.themoviedb.org/3/movie/${currentId}/videos`;
-    // const baseTvUrl = `https://api.themoviedb.org/3/tv/${currentId}/videos`
-    const params = {
-        'api_key': tmdbApi,
-        'language': 'en-US'
-    }
-    const videoLinkUrl = baseUrl + '?' + makeFullUrl(params);
-    // const fullTvUrl = baseTvUrl + '?' + makeFullUrl(params);
-    fetch(videoLinkUrl)
-    .then(response => response.json())
-    .then(responseJson => showPlatforms(responseJson));
-
-    // fetch(full)
-    // .then(response => response.json())
-    // .then(responseJson => showPlatforms(responseJson));
-}
-
-function showPlatforms(responseJson){
-    console.log(responseJson);
-    $('.video-section').empty();
-    // for(let i = 0; i < responseJson.results.length; i++){
-        console.log(responseJson.results[0].key);
-        if(responseJson.results[0].type === "Trailer"){
-        const videoId = responseJson.results[0].key;
-        $('.video-section').append(`
-        <iframe width="340" height="160" src="https://www.youtube-nocookie.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`);
-        }
-    // }
-    
-    // for(let i = 0; i < responseJson.results.length; i++){
-    //     if(responseJson.results[i].name === currentTitle){
-    //         console.log(responseJson.results[i]);
-    //         const titleResults = responseJson.results[i];
-
-    //         for(let d = 0; d < responseJson.results[0].locations.length; d++){
-    //             $('.platforms').append(`
-    //             <a href="${titleResults.locations[d].url}" target="_blank">
-    //             <img src="${titleResults.locations[d].icon}" alt="${titleResults.locations[d].display_name}" class="platform-logo">
-    //             </a>`);
-    //         }
-    //     }
-    // }
-   
 }
 
 function getColors() {
@@ -216,7 +115,7 @@ function getColors() {
         const currrentImgUrl = $('.selected > img').attr('src');
         const params = {
             'url': currrentImgUrl,
-            'palette': 'w3c'
+            'palette': 'precise'
         }
         const fullUrl = url + '?' + makeFullUrl(params);
         fetch(fullUrl, options)
@@ -228,7 +127,7 @@ function showColors(responseJson){
     console.log(responseJson)
     $('.color-palette').empty();
     for(let i=0; i < 6; i++)
-    $('.selected > .color-palette').append(`
+    $('.selected > .title-content > .color-palette').append(`
     <div class="color-palette-item" style="background-color:${responseJson.tags[i].color}"></div>`)
 }
 
