@@ -58,7 +58,6 @@ function displaySearch(responseJson){
     for(let i=0; i < responseJson.results.length; i++){
         $('.ul-results').append(
             `<li class="result-li item${i}" id="${responseJson.results[i].id}">
-            <span class="close hidden">&times;</span>
             <img src="https://image.tmdb.org/t/p/original${responseJson.results[i].poster_path}">
             <div class="title-content"><section class="title-details hidden">
             <h2 class="list-title">${responseJson.results[i].original_title}</h2>
@@ -66,7 +65,8 @@ function displaySearch(responseJson){
             <button type="submit" class="similar-submit">Find Similar?</button>
             </section>
             <section class="color-palette">
-            </section></div></li>`
+            </section></div>
+            <span class="close hidden">&times;</span></li>`
         )
         if(responseJson.results[i].poster_path === null) {
             $(`.item${i}`).hide();
@@ -77,32 +77,64 @@ function displaySearch(responseJson){
 }
 function watchResults(){
     $('.result-li').on('click', function(e) {
-        if($('.result-li').hasClass('selected') === true){
-            $('.result-li').removeClass('selected');
-            $('.title-details').addClass('hidden');
-            $('.close').addClass('hidden');
+        if($('.result-li').hasClass('selected')){
+
+            // $('.result-li').removeClass('selected');
+            // $('.title-details').addClass('hidden');
+            // $('.close').addClass('hidden');
+            // $('.close').on('click', function(e){
+                // e.preventDefault(); 
+                // console.log('working');
+                // const currentSelect = $('.selected').attr('id');
+                // // $('.result-li').off('click');
+                // close(currentSelect);
+                // console.log('working');
+                watchResults();
+                // watchResults();
+               
+               
+            // })
             
-        }else{
+        } else{
             $(this).addClass('selected modal-content');
+            const selected = $('.selected');
+            clickResult(selected);
             $('.selected > .title-content > .title-details').removeClass('hidden')
             $(this).wrap('<div class="modal"></div>');
             $('.selected > .close').removeClass('hidden');
-            getColors();
-      
-        
-        }
+            // getColors();
+            const currentSelect = $('.selected').attr('id');
+            // console.log('else working')
+            $('.close').on('click', function(){
+            close(currentSelect);
+        })
+            }
+    
         const titleId = $(this).attr('id');
         $('.similar-submit').on('click', function(e){
           e.preventDefault();
           getSimilar(titleId);  
         })
-        $('.close').on('click', function(e){
-            e.preventDefault();
-            $('.selected').parent('div').removeClass('modal');
-            $('.selected').removeClass('modal-content');
-            $('.color-palette-item').addClass('hidden');
-        })
+            // watchResults();
+
     })
+}
+
+function clickResult(selected){
+    // console.log(selected)
+}
+function close(currentSelect){
+    // $('.result-li').off('click');
+    $(`#${currentSelect}`).one('click', function(){
+    $(`#${currentSelect}`).unwrap('div')
+    $(`#${currentSelect}`).removeClass('modal-content');
+    $('.title-content').addClass('hidden');
+    $('.title-details').addClass('hidden');
+    $('.close').addClass('hidden');
+    $('.color-palette-item').addClass('hidden');
+    console.log(currentSelect);
+    $(`#${currentSelect}`).removeClass('selected');
+})
 }
 
 function getSimilar(titleId){
@@ -121,30 +153,30 @@ function getSimilar(titleId){
     .then(responseJson => displaySearch(responseJson));
 }
 
-function getColors() {
-    const options = {
-            headers: new Headers({
-                'x-rapidapi-key': rapidApiKey,
-                'X-rapidapi-host': "apicloud-colortag.p.rapidapi.com"})
-        };
-        const url = 'https://apicloud-colortag.p.rapidapi.com/tag-url.json';
-        const currrentImgUrl = $('.selected > img').attr('src');
-        const params = {
-            'url': currrentImgUrl,
-            'palette': 'precise'
-        }
-        const fullUrl = url + '?' + makeFullUrl(params);
-        fetch(fullUrl, options)
-        .then(response => response.json())
-        .then(responseJson => showColors(responseJson));
-}
+// function getColors() {
+//     const options = {
+//             headers: new Headers({
+//                 'x-rapidapi-key': rapidApiKey,
+//                 'X-rapidapi-host': "apicloud-colortag.p.rapidapi.com"})
+//         };
+//         const url = 'https://apicloud-colortag.p.rapidapi.com/tag-url.json';
+//         const currrentImgUrl = $('.selected > img').attr('src');
+//         const params = {
+//             'url': currrentImgUrl,
+//             'palette': 'precise'
+//         }
+//         const fullUrl = url + '?' + makeFullUrl(params);
+//         fetch(fullUrl, options)
+//         .then(response => response.json())
+//         .then(responseJson => showColors(responseJson));
+// }
 
-function showColors(responseJson){
-    $('.color-palette').empty();
-    for(let i=0; i < 6; i++)
-    $('.selected > .title-content > .color-palette').append(`
-    <div class="color-palette-item" style="background-color:${responseJson.tags[i].color}"></div>`)
-}
+// function showColors(responseJson){
+//     $('.color-palette').empty();
+//     for(let i=0; i < 6; i++)
+//     $('.selected > .title-content > .color-palette').append(`
+//     <div class="color-palette-item" style="background-color:${responseJson.tags[i].color}"></div>`)
+// }
 
 
 $(watchForm(), 

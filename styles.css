@@ -2,6 +2,10 @@
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+body {
+    background-color: black;
+}
 .hidden {
     display: none;
 }
@@ -75,7 +79,7 @@ img.platform-logo {
 
 .home-page .logo {
     display: block;
-    height: 300px;
+    height: 200px;
     margin: auto;
 }
 
@@ -85,6 +89,7 @@ img.platform-logo {
     border-left: 0;
     border-radius: 0 10px 10px 0;
     padding: 10px;
+    background-color: white;
 }
 .home-page .form-input {
     height: 50px;
@@ -121,6 +126,10 @@ img.platform-logo {
     padding: 10px;
 }
 
+input:focus {
+    outline: none;
+}
+
 .result-page .form-submit {
     height: 40px;
     border: 1px solid black;
@@ -130,6 +139,6 @@ img.platform-logo {
 }
 
 .result-page .logo {
-    height: 100px;
+    height: 50px;
     margin: 0 20px;
 }
