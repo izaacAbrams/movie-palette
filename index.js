@@ -21,6 +21,7 @@ function watchForm(){
         getTitles(userInput);
         $('form').parent('section').removeClass('home-page');
         $('form').parent('section').addClass('result-page');
+        $('.about-text').addClass('hidden');
     })
 }
 function makeFullUrl(params) {
@@ -50,10 +51,9 @@ function getTitles(userInput){
 }
 
 function displaySearch(responseJson){
-    console.log(responseJson);
     $('.ul-results').empty();
     if (responseJson.results.length === 0){
-        $('.ul-results').text('Title not found, check spelling and try again.')
+        $('.ul-results').text('Title not found, check spelling and try again.');
     }
     for(let i=0; i < responseJson.results.length; i++){
         $('.ul-results').append(
@@ -67,7 +67,7 @@ function displaySearch(responseJson){
             </section>
             <section class="color-palette">
             </section></div></li>`
-        )
+        );
         if(responseJson.results[i].poster_path === null) {
             $(`.item${i}`).hide();
         }
