@@ -7,7 +7,10 @@ function getTrending(){
     const url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${tmdbApi}`
     fetch(url)
     .then(response => response.json())
-    .then(responseJson => displaySearch(responseJson));
+    .then(responseJson => displaySearch(responseJson))
+    .catch(err => {
+        $('.ul-results').text(`Something went wrong: ${err.message}`)
+    });
 }
 
 function watchForm(){
@@ -16,6 +19,8 @@ function watchForm(){
         let userInput = $('.form-input').val();
         console.log(userInput);
         getTitles(userInput);
+        $('form').parent('section').removeClass('home-page');
+        $('form').parent('section').addClass('result-page');
     })
 }
 function makeFullUrl(params) {
@@ -37,12 +42,19 @@ function getTitles(userInput){
     
     fetch(movieUrl)
     .then(response => response.json())
-    .then(responseJson => displaySearch(responseJson));
+    .then(responseJson => displaySearch(responseJson))
+    .catch(err => {
+        $('.ul-results').text(`Something went wrong: ${err.message}`)
+    })
+    ;
 }
 
 function displaySearch(responseJson){
     console.log(responseJson);
     $('.ul-results').empty();
+    if (responseJson.results.length === 0){
+        $('.ul-results').text('Title not found, check spelling and try again.')
+    }
     for(let i=0; i < responseJson.results.length; i++){
         $('.ul-results').append(
             `<li class="result-li item${i}" id="${responseJson.results[i].id}">
@@ -69,16 +81,15 @@ function watchResults(){
             $('.result-li').removeClass('selected');
             $('.title-details').addClass('hidden');
             $('.close').addClass('hidden');
-            $('.selected > .title-content > .title-details').removeClass('hidden');
-            $('.selected > .close').removeClass('hidden')
-            // getColors();
             
         }else{
             $(this).addClass('selected modal-content');
             $('.selected > .title-content > .title-details').removeClass('hidden')
             $(this).wrap('<div class="modal"></div>');
             $('.selected > .close').removeClass('hidden');
-            // getColors();
+            getColors();
+      
+        
         }
         const titleId = $(this).attr('id');
         $('.similar-submit').on('click', function(e){
@@ -89,7 +100,7 @@ function watchResults(){
             e.preventDefault();
             $('.selected').parent('div').removeClass('modal');
             $('.selected').removeClass('modal-content');
-            console.log(this)
+            $('.color-palette-item').addClass('hidden');
         })
     })
 }
@@ -110,31 +121,30 @@ function getSimilar(titleId){
     .then(responseJson => displaySearch(responseJson));
 }
 
-// function getColors() {
-//     const options = {
-//             headers: new Headers({
-//                 'x-rapidapi-key': rapidApiKey,
-//                 'X-rapidapi-host': "apicloud-colortag.p.rapidapi.com"})
-//         };
-//         const url = 'https://apicloud-colortag.p.rapidapi.com/tag-url.json';
-//         const currrentImgUrl = $('.selected > img').attr('src');
-//         const params = {
-//             'url': currrentImgUrl,
-//             'palette': 'precise'
-//         }
-//         const fullUrl = url + '?' + makeFullUrl(params);
-//         fetch(fullUrl, options)
-//         .then(response => response.json())
-//         .then(responseJson => showColors(responseJson));
-// }
+function getColors() {
+    const options = {
+            headers: new Headers({
+                'x-rapidapi-key': rapidApiKey,
+                'X-rapidapi-host': "apicloud-colortag.p.rapidapi.com"})
+        };
+        const url = 'https://apicloud-colortag.p.rapidapi.com/tag-url.json';
+        const currrentImgUrl = $('.selected > img').attr('src');
+        const params = {
+            'url': currrentImgUrl,
+            'palette': 'precise'
+        }
+        const fullUrl = url + '?' + makeFullUrl(params);
+        fetch(fullUrl, options)
+        .then(response => response.json())
+        .then(responseJson => showColors(responseJson));
+}
 
-// function showColors(responseJson){
-//     console.log(responseJson)
-//     $('.color-palette').empty();
-//     for(let i=0; i < 6; i++)
-//     $('.selected > .title-content > .color-palette').append(`
-//     <div class="color-palette-item" style="background-color:${responseJson.tags[i].color}"></div>`)
-// }
+function showColors(responseJson){
+    $('.color-palette').empty();
+    for(let i=0; i < 6; i++)
+    $('.selected > .title-content > .color-palette').append(`
+    <div class="color-palette-item" style="background-color:${responseJson.tags[i].color}"></div>`)
+}
 
 
 $(watchForm(), 

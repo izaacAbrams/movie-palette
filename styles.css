@@ -1,4 +1,7 @@
-
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
 .hidden {
     display: none;
 }
@@ -20,14 +23,7 @@
     list-style: none;
     margin: 20px;
     display: flex;
-}
-
-.no-poster {
-    background-color: #232323;
-    color: white;
-    font-size: 32px;
-    height: 300px;
-    width: 200px;
+    cursor: pointer;
 }
 
 img.platform-logo {
@@ -61,6 +57,7 @@ img.platform-logo {
     padding: 20px;
     border: none;
     width: 1000px; 
+    overflow: auto;
 }
 
 .close {
@@ -76,10 +73,63 @@ img.platform-logo {
     flex-direction: column;
 }
 
-.form-input {
+.home-page .logo {
+    display: block;
+    height: 300px;
+    margin: auto;
+}
+
+.home-page .form-submit {
+    height: 50px;
+    border: 1px solid black;
+    border-left: 0;
+    border-radius: 0 10px 10px 0;
+    padding: 10px;
+}
+.home-page .form-input {
     height: 50px;
     width: 400px;
-    margin: 100px;
-    border-radius: 10px 0 0 10px;
+    margin: 50px 0;
+    padding: 10px;
     border: 1px solid black;
+    border-right: 0;
+    border-radius: 10px 0 0 10px;
+    font-size: 36px;
+}
+
+.home-page form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-page {
+    display: flex;
+}
+.result-page form{
+    display: flex;
+    align-items: center;
+}
+
+.result-page .form-input {
+    width: 300px;
+    height: 40px;
+    border: 1px solid black;
+    border-right: 0;
+    border-radius: 10px 0 0 10px;
+    margin-left: 30px;
+    padding: 10px;
+}
+
+.result-page .form-submit {
+    height: 40px;
+    border: 1px solid black;
+    border-left: 0;
+    border-radius: 0 10px 10px 0;
+    padding: 10px;
+}
+
+.result-page .logo {
+    height: 100px;
+    margin: 0 20px;
 }
