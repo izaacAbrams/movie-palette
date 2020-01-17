@@ -5,6 +5,7 @@
 
 body {
     background-color: black;
+    color: white;
 }
 .hidden {
     display: none;
@@ -75,6 +76,7 @@ img.platform-logo {
 .title-content { 
     display: flex;
     flex-direction: column;
+    color: black;
 }
 
 .home-page .logo {
@@ -141,4 +143,7 @@ input:focus {
 .result-page .logo {
     height: 50px;
     margin: 0 20px;
+}
+.result-title { 
+    text-align: center;
 }

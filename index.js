@@ -56,9 +56,11 @@ function displaySearch(responseJson){
         $('.ul-results').text('Title not found, check spelling and try again.')
     }
     for(let i=0; i < responseJson.results.length; i++){
+
         $('.ul-results').append(
-            `<li class="result-li item${i}" id="${responseJson.results[i].id}">
+            `<div class="list-container"><li class="result-li item${i}" id="${responseJson.results[i].id}">
             <img src="https://image.tmdb.org/t/p/original${responseJson.results[i].poster_path}">
+    
             <div class="title-content"><section class="title-details hidden">
             <h2 class="list-title">${responseJson.results[i].original_title}</h2>
             <p class="list-description">${responseJson.results[i].overview}</p>
@@ -66,49 +68,38 @@ function displaySearch(responseJson){
             </section>
             <section class="color-palette">
             </section></div>
-            <span class="close hidden">&times;</span></li>`
+            <span class="close hidden">&times;</span></li>
+            <h2 class="result-title" id="title${i}">
+            ${(responseJson.results[i].original_title.length > 17) ?
+                responseJson.results[i].original_title.slice(0, 16) + "..." : 
+                responseJson.results[i].original_title}</h2></div>`
         )
         if(responseJson.results[i].poster_path === null) {
             $(`.item${i}`).hide();
         }
-
-    }
+     }
         watchResults();
 }
+
 function watchResults(){
     $('.result-li').on('click', function(e) {
-        if($('.result-li').hasClass('selected')){
+        if($('.result-li').hasClass('selected') !== true){
 
-            // $('.result-li').removeClass('selected');
-            // $('.title-details').addClass('hidden');
-            // $('.close').addClass('hidden');
-            // $('.close').on('click', function(e){
-                // e.preventDefault(); 
-                // console.log('working');
-                // const currentSelect = $('.selected').attr('id');
-                // // $('.result-li').off('click');
-                // close(currentSelect);
-                // console.log('working');
-                watchResults();
-                // watchResults();
-               
-               
-            // })
-            
-        } else{
             $(this).addClass('selected modal-content');
             const selected = $('.selected');
             clickResult(selected);
-            $('.selected > .title-content > .title-details').removeClass('hidden')
+            $('.selected > .title-content > .title-details').removeClass('hidden');
             $(this).wrap('<div class="modal"></div>');
+            $(this).parent('div').siblings('h2').addClass('hidden');
             $('.selected > .close').removeClass('hidden');
             // getColors();
+            console.log(this)
             const currentSelect = $('.selected').attr('id');
-            // console.log('else working')
             $('.close').on('click', function(){
-            close(currentSelect);
-        })
-            }
+            close(currentSelect); })
+        }else {
+            
+        }
     
         const titleId = $(this).attr('id');
         $('.similar-submit').on('click', function(e){
@@ -126,8 +117,9 @@ function clickResult(selected){
 function close(currentSelect){
     // $('.result-li').off('click');
     $(`#${currentSelect}`).one('click', function(){
-    $(`#${currentSelect}`).unwrap('div')
+    $(`#${currentSelect}`).unwrap('.modal');
     $(`#${currentSelect}`).removeClass('modal-content');
+    $(`#${currentSelect}`).siblings('h2').removeClass('hidden');
     $('.title-content').addClass('hidden');
     $('.title-details').addClass('hidden');
     $('.close').addClass('hidden');
