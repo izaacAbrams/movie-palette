@@ -37,6 +37,9 @@ body {
     list-style: none;
     margin: 30px;
     display: flex;
+}
+
+.list-container > .result-li > img {
     cursor: pointer;
 }
 
@@ -48,6 +51,9 @@ img.platform-logo {
     width: 20%;
     height: 200px;
     margin: 25px 0;
+    /* display: flex;
+    align-items: flex-end;
+    padding: 20px 0; */
 }
 .color-palette-item:first-of-type {
     border-radius: 15px 0 0 15px;
@@ -83,8 +89,7 @@ img.platform-logo {
 
 .close {
     color: #aaa;
-    float: right;
-    font-size: 28px;
+    font-size: 40px;
     font-weight: bold;
     cursor: pointer;
     height: 30px;
@@ -201,6 +206,8 @@ input:focus {
 
 .inner-color-text {
     color: white;
+    background: none;
+    border: none;
     margin-top: 170px;
     text-align: center;
 }

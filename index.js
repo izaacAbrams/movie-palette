@@ -79,6 +79,8 @@ function displaySearch(responseJson){
         )
         if(responseJson.results[i].poster_path === null) {
             $(`.item${i}`).hide();
+            $(`#title${i}`).hide();
+            console.log(`.title${i}`)
         }
      }
         watchResults();
@@ -96,15 +98,17 @@ function watchResults(){
             getColors();
             console.log(this)
             const currentSelect = $('.selected').attr('id');
-            $('.close').on('click', function(){
-            close(currentSelect); })
-        }else {
-            
+            $('.close' ).on('click', function(){
+            close(currentSelect); });
+            $('.body' ).not('.selected').on('click', function(){
+                close(currentSelect); });
         }
     
         const titleId = $(this).attr('id');
         $('.similar-submit').on('click', function(e){
           e.preventDefault();
+          $('form').parent('section').removeClass('home-page');
+          $('form').parent('section').addClass('result-page');
           getSimilar(titleId);  
         })
             // watchResults();
@@ -122,7 +126,6 @@ function close(currentSelect){
     $('.title-details').addClass('hidden');
     $('.close').addClass('hidden');
     $('.color-palette-item').addClass('hidden');
-    console.log(currentSelect);
     $(`#${currentSelect}`).removeClass('selected');
     watchResults();
 })
@@ -163,12 +166,18 @@ function getColors() {
 }
 
 function showColors(responseJson){
-    console.log(responseJson)
     $('.color-palette').empty();
-    for(let i=0; i < 6; i++)
+    console.log(responseJson)
+    for(let i=0; i < 6; i++){
     $('.selected > .title-content > .title-details > .color-palette').append(`
-    <div class="color-palette-item" style="background-color:${responseJson.tags[i].color}">
-    <p class="inner-color-text">${responseJson.tags[i].color}</p></div>`)
+    <div class="color-palette-item ${responseJson.tags[i].label.slice(0,3)}" style="background-color:${responseJson.tags[i].color}">
+    <p class="inner-color-text">${responseJson.tags[i].color}</p></div>`);
+    // $(`.${responseJson.tags[i].label.slice(0,3)}`).on('click', function(){
+    //     $(this > '').focus();
+    //     $('.inner-color-text').select();
+    //     document.execCommand("copy");
+    // })
+}
 }
 
 
