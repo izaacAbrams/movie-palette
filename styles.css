@@ -51,6 +51,7 @@ img.platform-logo {
     width: 20%;
     height: 200px;
     margin: 25px 0;
+    cursor: pointer;
     /* display: flex;
     align-items: flex-end;
     padding: 20px 0; */
@@ -74,7 +75,6 @@ img.platform-logo {
     height: 100%; 
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4); 
-    overflow: auto;
 }
 
 .modal-content {
@@ -228,6 +228,7 @@ input:focus {
     } */
     .modal {
         background-color: white;
+        overflow: auto;
     }
     .modal-content {
         margin: 0;

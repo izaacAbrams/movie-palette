@@ -101,7 +101,8 @@ function watchResults(){
             const currentSelect = $('.selected').attr('id');
             $('.close' ).on('click', function(){
             close(currentSelect); });
-            // $('.body' ).not('.selected').on('click', function(){
+            // $('.modal' ).not('.result-li').on('click', function(){
+            //     console.log('working')
             //     close(currentSelect); });
         }
     
@@ -112,15 +113,16 @@ function watchResults(){
           $('form').parent('section').addClass('result-page');
           $('body').attr('style', 'overflow: auto');
           getSimilar(titleId);  
-        })
-        $('.logo').on('click', function(){
-            $('form').parent('section').removeClass('result-page');
-            $('form').parent('section').addClass('home-page');
+        });
+       
+    });
+    $('img.logo').on('click', function(){
+            console.log('working')
+            $('.logo').parent('section').removeClass('result-page');
+            $('.logo').parent('section').addClass('home-page');
+            $('.form-input').val('');
             getTrending(); 
-        })
-          
-
-    })
+        });
 }
 
 function close(currentSelect){
@@ -178,11 +180,21 @@ function showColors(responseJson){
     $('.selected > .title-content > .title-details > .color-palette').append(`
     <div class="color-palette-item ${responseJson.tags[i].label.slice(0,3)}" style="background-color:${responseJson.tags[i].color}">
     <p class="inner-color-text">${responseJson.tags[i].color}</p></div>`);
-    // $(`.${responseJson.tags[i].label.slice(0,3)}`).on('click', function(){
-    //     $(this > '').focus();
-    //     $('.inner-color-text').select();
-    //     document.execCommand("copy");
-    // })
+    $(`.${responseJson.tags[i].label.slice(0,3)}`).on('click', function(){
+    var $temp = $("<input>");
+    console.log(this)
+    $('body').append($temp);
+    $temp.val($(this).children($('.inner-color-text')).text()).select();
+    document.execCommand("copy");
+    $temp.remove(); 
+    $(this).children('.inner-color-text').html(`
+        <p class="inner-color-text">Copied!</p>`);
+    setTimeout(function(){
+        $(`.${responseJson.tags[i].label.slice(0,3)}`).children('.inner-color-text').html(`
+        <p class="inner-color-text">
+        ${responseJson.tags[i].color}</p>`);
+    }, 2000);
+})
 }
 }
 
