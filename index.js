@@ -1,8 +1,10 @@
 "use strict";
 
 const tmdbApi = "85a0dacfff0d08f1c3713be131c6cb65";
-const rapidApiKey = "b13b17d0cemsh83f578cce0d1efcp1a073cjsn3e03ae9e5d9f";
-// "d5c2b783bamshaee5da7f787d6a2p1cce10jsnadf76762d651"
+const rapidApiKey = "d5c2b783bamshaee5da7f787d6a2p1cce10jsnadf76762d651";
+// alt key "b13b17d0cemsh83f578cce0d1efcp1a073cjsn3e03ae9e5d9f"
+
+//on page load, get trending movies for the week
 function getTrending(){
     const url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${tmdbApi}`
     fetch(url)
@@ -12,7 +14,7 @@ function getTrending(){
         $('.ul-results').text(`Something went wrong: ${err.message}`)
     });
 }
-
+//on load, watch form for submit and pass to function to get movie results
 function watchForm(){
     $('form').submit(e => {
         e.preventDefault();
@@ -23,13 +25,13 @@ function watchForm(){
         $('form').parent('section').addClass('result-page');
     })
 }
-
+//maps through object and returns keys and values in a url format
 function makeFullUrl(params) {
     const queryItems = Object.keys(params)
     .map(key => `${encodeURIComponent(key)}=${params[encodeURIComponent(key)]}`)
     return queryItems.join('&');
 }
-
+//calls the movie db api and returns the first page of results
 function getTitles(userInput){
     const mUrl = "https://api.themoviedb.org/3/search/movie";
     const params = {
@@ -49,7 +51,8 @@ function getTitles(userInput){
     })
     ;
 }
-
+//creates html list items for each result returned. if movie title is more than 15 characters 
+// it will cut off remaining characters and replace with ... 
 function displaySearch(responseJson){
     $('.ul-results').empty();
     if (responseJson.results.length === 0){
@@ -85,7 +88,7 @@ function displaySearch(responseJson){
      }
         watchResults();
 }
-
+//creates modal when user clicks on movie poster
 function watchResults(){
     $('.result-li').on('click', function(e) {
         if($('.result-li').hasClass('selected') !== true){
@@ -101,9 +104,6 @@ function watchResults(){
             const currentSelect = $('.selected').attr('id');
             $('.close' ).on('click', function(){
             close(currentSelect); });
-            // $('.selected' ).not().on('click', function(){
-            //     console.log('working')
-            //     close(currentSelect); });
         }
     
         const titleId = $(this).attr('id');
@@ -124,7 +124,7 @@ function watchResults(){
             getTrending(); 
         });
 }
-
+//closes modal when user clicks on x
 function close(currentSelect){
     $(`#${currentSelect}`).one('click', function(){
     $(`#${currentSelect}`).unwrap('.modal');
@@ -136,9 +136,9 @@ function close(currentSelect){
     $(`#${currentSelect}`).removeClass('selected');
     $('body').attr('style', 'overflow: auto');
     watchResults();
-})
+});
 }
-
+//takes movie that button was pressed on and fetches movies similar to that
 function getSimilar(titleId){
     const url = "https://api.themoviedb.org/3/movie/";
     const movieId = `${titleId}/similar`;
@@ -156,7 +156,7 @@ function getSimilar(titleId){
 
     window.scrollTo(0, 0);
 }
-
+//due to api limits can only load results when user opens modal
 function getColors() {
     const options = {
             headers: new Headers({
@@ -174,7 +174,7 @@ function getColors() {
         .then(response => response.json())
         .then(responseJson => showColors(responseJson));
 }
-
+//places results inside the div element, and listens for click on each element to copy to clipboard
 function showColors(responseJson){
     $('.color-palette').empty();
     for(let i=0; i < 6; i++){
