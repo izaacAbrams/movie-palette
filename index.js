@@ -93,7 +93,6 @@ function displaySearch(responseJson){
 function watchResults(){
     $('.result-li').on('click', function(e) {
         if($('.result-li').hasClass('selected') !== true){
-
             $(this).addClass('selected modal-content');
             $('.selected > .title-content > .title-details').removeClass('hidden');
             $(this).wrap('<div class="modal"></div>');
@@ -101,29 +100,31 @@ function watchResults(){
             $('body').attr('style', 'overflow: hidden');
             $('.selected > .close').removeClass('hidden');
             getColors();
-            console.log(this)
             const currentSelect = $('.selected').attr('id');
+
             $('.close' ).on('click', function(){
-            close(currentSelect); });
+            close(currentSelect); 
+            });
         }
-    
         const titleId = $(this).attr('id');
+
         $('.similar-submit').on('click', function(e){
           e.preventDefault();
           $('form').parent('section').removeClass('home-page');
           $('form').parent('section').addClass('result-page');
+          $('.about-text').addClass('hidden');
           $('body').attr('style', 'overflow: auto');
           getSimilar(titleId);  
         });
        
     });
     $('img.logo').on('click', function(){
-            console.log('working')
-            $('.logo').parent('section').removeClass('result-page');
-            $('.logo').parent('section').addClass('home-page');
-            $('.form-input').val('');
-            getTrending(); 
-        });
+        $('.logo').parent('section').removeClass('result-page');
+        $('.logo').parent('section').addClass('home-page');
+        $('.form-input').val('');
+        $('.about-text').removeClass('hidden');
+        getTrending(); 
+    });
 }
 //closes modal when user clicks on x
 function close(currentSelect){
@@ -156,47 +157,48 @@ function getSimilar(titleId){
     .then(responseJson => displaySearch(responseJson));
 
     window.scrollTo(0, 0);
+    
 }
 //due to api limits can only load results when user opens modal
 function getColors() {
     const options = {
-            headers: new Headers({
-                'x-rapidapi-key': rapidApiKey,
-                'X-rapidapi-host': "apicloud-colortag.p.rapidapi.com"})
+        headers: new Headers({
+            'x-rapidapi-key': rapidApiKey,
+            'X-rapidapi-host': "apicloud-colortag.p.rapidapi.com"})
         };
-        const url = 'https://apicloud-colortag.p.rapidapi.com/tag-url.json';
-        const currrentImgUrl = $('.selected > img').attr('src');
-        const params = {
-            'url': currrentImgUrl,
-            'palette': 'precise'
-        }
-        const fullUrl = url + '?' + makeFullUrl(params);
-        fetch(fullUrl, options)
-        .then(response => response.json())
-        .then(responseJson => showColors(responseJson));
+    const url = 'https://apicloud-colortag.p.rapidapi.com/tag-url.json';
+    const currrentImgUrl = $('.selected > img').attr('src');
+    const params = {
+        'url': currrentImgUrl,
+        'palette': 'precise'
+    }
+    const fullUrl = url + '?' + makeFullUrl(params);
+    fetch(fullUrl, options)
+    .then(response => response.json())
+    .then(responseJson => showColors(responseJson));
 }
 //places results inside the div element, and listens for click on each element to copy to clipboard
 function showColors(responseJson){
     $('.color-palette').empty();
     for(let i=0; i < 6; i++){
-    $('.selected > .title-content > .title-details > .color-palette').append(`
-    <div class="color-palette-item ${responseJson.tags[i].label.slice(0,3)}" style="background-color:${responseJson.tags[i].color}">
-    <p class="inner-color-text">${responseJson.tags[i].color}</p></div>`);
-    $(`.${responseJson.tags[i].label.slice(0,3)}`).on('click', function(){
-    var $temp = $("<input>");
-    $('body').append($temp);
-    $temp.val($(this).children($('.inner-color-text')).text()).select();
-    document.execCommand("copy");
-    $temp.remove(); 
-    $(this).children('.inner-color-text').html(`
-        <p class="inner-color-text">Copied!</p>`);
-    setTimeout(function(){
-        $(`.${responseJson.tags[i].label.slice(0,3)}`).children('.inner-color-text').html(`
-        <p class="inner-color-text">
-        ${responseJson.tags[i].color}</p>`);
-    }, 2000);
-})
-}
+        $('.selected > .title-content > .title-details > .color-palette').append(`
+            <div class="color-palette-item ${responseJson.tags[i].label.slice(0,3)}" style="background-color:${responseJson.tags[i].color}">
+            <p class="inner-color-text">${responseJson.tags[i].color}</p></div>`);
+        $(`.${responseJson.tags[i].label.slice(0,3)}`).on('click', function(){
+            var $temp = $("<input>");
+            $('body').append($temp);
+            $temp.val($(this).children($('.inner-color-text')).text()).select();
+            document.execCommand("copy");
+            $temp.remove(); 
+            $(this).children('.inner-color-text').html(`
+            <p class="inner-color-text">Copied!</p>`);
+            setTimeout(function(){
+                $(`.${responseJson.tags[i].label.slice(0,3)}`).children('.inner-color-text').html(`
+                <p class="inner-color-text">
+                ${responseJson.tags[i].color}</p>`);
+            }, 2000);
+        })
+    }
 }
 
 
