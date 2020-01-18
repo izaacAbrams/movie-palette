@@ -212,6 +212,11 @@ input:focus, .similar-submit:focus {
     font-size: 1vw;
 }
 
+.about-text {
+    font-family: 'Abel', sans-serif;
+    margin: 0 50px;
+    font-weight: 200;
+}
 @media only screen and (max-width: 1000px) {
     .modal {
         background-color: white;
