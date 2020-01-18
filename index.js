@@ -58,21 +58,24 @@ function displaySearch(responseJson){
     for(let i=0; i < responseJson.results.length; i++){
 
         $('.ul-results').append(
-            `<div class="list-container"><li class="result-li item${i}" id="${responseJson.results[i].id}">
-            <img src="https://image.tmdb.org/t/p/original${responseJson.results[i].poster_path}">
-    
-            <div class="title-content"><section class="title-details hidden">
-            <h2 class="list-title">${responseJson.results[i].original_title}</h2>
-            <p class="list-description">${responseJson.results[i].overview}</p>
-            <button type="submit" class="similar-submit">Find Similar?</button>
-            </section>
-            <section class="color-palette">
-            </section></div>
-            <span class="close hidden">&times;</span></li>
-            <h2 class="result-title" id="title${i}">
-            ${(responseJson.results[i].original_title.length > 17) ?
+            `<section class="list-container">
+                <li class="result-li item${i}" id="${responseJson.results[i].id}">
+                    <img src="https://image.tmdb.org/t/p/original${responseJson.results[i].poster_path}">
+                    <div class="title-content">
+                        <div class="title-details hidden">
+                            <h2 class="list-title">${responseJson.results[i].original_title}</h2>
+                            <p class="list-description">${responseJson.results[i].overview}</p>
+                            <section class="color-palette"></section> 
+                            <button type="submit" class="similar-submit">Find Similar?</button>
+                        </div>  
+                    </div> 
+                    <span class="close hidden">&times;</span> 
+                </li>
+                <h2 class="result-title" id="title${i}">
+                ${(responseJson.results[i].original_title.length > 17) ?
                 responseJson.results[i].original_title.slice(0, 16) + "..." : 
-                responseJson.results[i].original_title}</h2></div>`
+                responseJson.results[i].original_title}</h2>
+            </section>`
         )
         if(responseJson.results[i].poster_path === null) {
             $(`.item${i}`).hide();
@@ -120,12 +123,13 @@ function close(currentSelect){
     $(`#${currentSelect}`).unwrap('.modal');
     $(`#${currentSelect}`).removeClass('modal-content');
     $(`#${currentSelect}`).siblings('h2').removeClass('hidden');
-    $('.title-content').addClass('hidden');
+    // $('.title-content').addClass('hidden');
     $('.title-details').addClass('hidden');
     $('.close').addClass('hidden');
     $('.color-palette-item').addClass('hidden');
     console.log(currentSelect);
     $(`#${currentSelect}`).removeClass('selected');
+    watchResults();
 })
 }
 

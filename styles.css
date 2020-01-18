@@ -6,6 +6,8 @@
 body {
     background-color: black;
     color: white;
+    margin: 0;
+    padding: 0;
 }
 .hidden {
     display: none;
@@ -21,7 +23,7 @@ body {
 
 .result-li img{
     height: 300px;
-
+    border-radius: 5px;
 }
 
 .result-li {
@@ -61,8 +63,10 @@ img.platform-logo {
     margin: 50px auto; 
     padding: 20px;
     border: none;
-    width: 1000px; 
+    border-radius: 20px;
+    width: 80%; 
     overflow: auto;
+
 }
 
 .close {
@@ -71,18 +75,24 @@ img.platform-logo {
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    height: 30px;
 }
 
+.title-details{
+     margin: 30px;
+     line-height: 28px;
+}
 .title-content { 
     display: flex;
     flex-direction: column;
     color: black;
+   
 }
 
 .home-page .logo {
     display: block;
     height: 200px;
-    margin: auto;
+    margin: 50px auto 0;
 }
 
 .home-page .form-submit {
@@ -146,4 +156,17 @@ input:focus {
 }
 .result-title { 
     text-align: center;
+}
+
+.similar-submit {
+    border: none;
+    background-color: #4527A0;
+    padding: 10px 25px;
+    font-size: 26px;
+    border-radius: 50px;
+    color: white;
+}
+
+.similar-submit:hover {
+    background-color: #5E35B1;
 }
