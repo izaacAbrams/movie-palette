@@ -1,13 +1,14 @@
 * {
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 body {
     background-color: black;
     color: white;
-    margin: 0;
-    padding: 0;
+    
 }
 .hidden {
     display: none;
@@ -19,6 +20,8 @@ body {
 .ul-results {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
 }
 
 .result-li img{
@@ -26,9 +29,13 @@ body {
     border-radius: 5px;
 }
 
+.modal .result-li img {
+    height: 400px;
+    margin: 30px 0;
+}
 .result-li {
     list-style: none;
-    margin: 20px;
+    margin: 30px;
     display: flex;
     cursor: pointer;
 }
@@ -38,11 +45,16 @@ img.platform-logo {
 }
 
 .color-palette-item {
-    width: 100px;
-    height: 300px;
-
+    width: 20%;
+    height: 200px;
+    margin: 25px 0;
 }
-
+.color-palette-item:first-of-type {
+    border-radius: 15px 0 0 15px;
+}
+.color-palette-item:last-of-type {
+    border-radius: 0 15px 15px 0;
+}
 .color-palette {
     display: flex;
 }
@@ -80,12 +92,12 @@ img.platform-logo {
 
 .title-details{
      margin: 30px;
-     line-height: 28px;
 }
 .title-content { 
     display: flex;
     flex-direction: column;
     color: black;
+    cursor: default;
    
 }
 
@@ -107,7 +119,7 @@ img.platform-logo {
     height: 50px;
     width: 400px;
     margin: 50px 0;
-    padding: 10px;
+    padding: 15px;
     border: 1px solid black;
     border-right: 0;
     border-radius: 10px 0 0 10px;
@@ -122,19 +134,22 @@ img.platform-logo {
 
 .result-page {
     display: flex;
+    justify-content: space-between;
+    margin: 15px;
 }
 .result-page form{
     display: flex;
     align-items: center;
+    margin: auto;
 }
 
 .result-page .form-input {
+    font-size: 22px;
     width: 300px;
     height: 40px;
     border: 1px solid black;
     border-right: 0;
     border-radius: 10px 0 0 10px;
-    margin-left: 30px;
     padding: 10px;
 }
 
@@ -144,6 +159,7 @@ input:focus {
 
 .result-page .form-submit {
     height: 40px;
+    background-color: white;
     border: 1px solid black;
     border-left: 0;
     border-radius: 0 10px 10px 0;
@@ -158,15 +174,33 @@ input:focus {
     text-align: center;
 }
 
+.list-title {
+    margin: 0 15px 20px;
+    font-size: 32px;
+}
+
+.list-description {
+    margin: 0 15px;
+    font-size: 20px;
+    line-height: 32px;
+}
 .similar-submit {
     border: none;
     background-color: #4527A0;
     padding: 10px 25px;
+    margin: 15px;
     font-size: 26px;
     border-radius: 50px;
     color: white;
+    cursor: pointer;
 }
 
 .similar-submit:hover {
     background-color: #5E35B1;
+}
+
+.inner-color-text {
+    color: white;
+    margin-top: 170px;
+    text-align: center;
 }

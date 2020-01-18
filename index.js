@@ -72,8 +72,8 @@ function displaySearch(responseJson){
                     <span class="close hidden">&times;</span> 
                 </li>
                 <h2 class="result-title" id="title${i}">
-                ${(responseJson.results[i].original_title.length > 17) ?
-                responseJson.results[i].original_title.slice(0, 16) + "..." : 
+                ${(responseJson.results[i].original_title.length > 15) ?
+                responseJson.results[i].original_title.slice(0, 14) + "..." : 
                 responseJson.results[i].original_title}</h2>
             </section>`
         )
@@ -89,13 +89,11 @@ function watchResults(){
         if($('.result-li').hasClass('selected') !== true){
 
             $(this).addClass('selected modal-content');
-            const selected = $('.selected');
-            clickResult(selected);
             $('.selected > .title-content > .title-details').removeClass('hidden');
             $(this).wrap('<div class="modal"></div>');
             $(this).parent('div').siblings('h2').addClass('hidden');
             $('.selected > .close').removeClass('hidden');
-            // getColors();
+            getColors();
             console.log(this)
             const currentSelect = $('.selected').attr('id');
             $('.close').on('click', function(){
@@ -114,9 +112,6 @@ function watchResults(){
     })
 }
 
-function clickResult(selected){
-    // console.log(selected)
-}
 function close(currentSelect){
     // $('.result-li').off('click');
     $(`#${currentSelect}`).one('click', function(){
@@ -149,30 +144,32 @@ function getSimilar(titleId){
     .then(responseJson => displaySearch(responseJson));
 }
 
-// function getColors() {
-//     const options = {
-//             headers: new Headers({
-//                 'x-rapidapi-key': rapidApiKey,
-//                 'X-rapidapi-host': "apicloud-colortag.p.rapidapi.com"})
-//         };
-//         const url = 'https://apicloud-colortag.p.rapidapi.com/tag-url.json';
-//         const currrentImgUrl = $('.selected > img').attr('src');
-//         const params = {
-//             'url': currrentImgUrl,
-//             'palette': 'precise'
-//         }
-//         const fullUrl = url + '?' + makeFullUrl(params);
-//         fetch(fullUrl, options)
-//         .then(response => response.json())
-//         .then(responseJson => showColors(responseJson));
-// }
+function getColors() {
+    const options = {
+            headers: new Headers({
+                'x-rapidapi-key': rapidApiKey,
+                'X-rapidapi-host': "apicloud-colortag.p.rapidapi.com"})
+        };
+        const url = 'https://apicloud-colortag.p.rapidapi.com/tag-url.json';
+        const currrentImgUrl = $('.selected > img').attr('src');
+        const params = {
+            'url': currrentImgUrl,
+            'palette': 'precise'
+        }
+        const fullUrl = url + '?' + makeFullUrl(params);
+        fetch(fullUrl, options)
+        .then(response => response.json())
+        .then(responseJson => showColors(responseJson));
+}
 
-// function showColors(responseJson){
-//     $('.color-palette').empty();
-//     for(let i=0; i < 6; i++)
-//     $('.selected > .title-content > .color-palette').append(`
-//     <div class="color-palette-item" style="background-color:${responseJson.tags[i].color}"></div>`)
-// }
+function showColors(responseJson){
+    console.log(responseJson)
+    $('.color-palette').empty();
+    for(let i=0; i < 6; i++)
+    $('.selected > .title-content > .title-details > .color-palette').append(`
+    <div class="color-palette-item" style="background-color:${responseJson.tags[i].color}">
+    <p class="inner-color-text">${responseJson.tags[i].color}</p></div>`)
+}
 
 
 $(watchForm(), 
