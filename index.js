@@ -23,6 +23,7 @@ function watchForm(){
         getTitles(userInput);
         $('form').parent('section').removeClass('home-page');
         $('form').parent('section').addClass('result-page');
+        $('.about-text').addClass('hidden');
     })
 }
 //maps through object and returns keys and values in a url format
@@ -56,7 +57,7 @@ function getTitles(userInput){
 function displaySearch(responseJson){
     $('.ul-results').empty();
     if (responseJson.results.length === 0){
-        $('.ul-results').text('Title not found, check spelling and try again.')
+        $('.ul-results').text('Title not found, check spelling and try again.');
     }
     for(let i=0; i < responseJson.results.length; i++){
 
