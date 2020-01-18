@@ -2,7 +2,7 @@
 
 const tmdbApi = "85a0dacfff0d08f1c3713be131c6cb65";
 const rapidApiKey = "b13b17d0cemsh83f578cce0d1efcp1a073cjsn3e03ae9e5d9f";
-
+// "d5c2b783bamshaee5da7f787d6a2p1cce10jsnadf76762d651"
 function getTrending(){
     const url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${tmdbApi}`
     fetch(url)
@@ -101,7 +101,7 @@ function watchResults(){
             const currentSelect = $('.selected').attr('id');
             $('.close' ).on('click', function(){
             close(currentSelect); });
-            // $('.modal' ).not('.result-li').on('click', function(){
+            // $('.selected' ).not().on('click', function(){
             //     console.log('working')
             //     close(currentSelect); });
         }
@@ -153,6 +153,8 @@ function getSimilar(titleId){
     fetch(fullUrl)
     .then(response => response.json())
     .then(responseJson => displaySearch(responseJson));
+
+    window.scrollTo(0, 0);
 }
 
 function getColors() {
@@ -175,14 +177,12 @@ function getColors() {
 
 function showColors(responseJson){
     $('.color-palette').empty();
-    console.log(responseJson)
     for(let i=0; i < 6; i++){
     $('.selected > .title-content > .title-details > .color-palette').append(`
     <div class="color-palette-item ${responseJson.tags[i].label.slice(0,3)}" style="background-color:${responseJson.tags[i].color}">
     <p class="inner-color-text">${responseJson.tags[i].color}</p></div>`);
     $(`.${responseJson.tags[i].label.slice(0,3)}`).on('click', function(){
     var $temp = $("<input>");
-    console.log(this)
     $('body').append($temp);
     $temp.val($(this).children($('.inner-color-text')).text()).select();
     document.execCommand("copy");
