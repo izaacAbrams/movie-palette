@@ -74,6 +74,7 @@ img.platform-logo {
     height: 100%; 
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4); 
+    overflow: auto;
 }
 
 .modal-content {
@@ -97,10 +98,9 @@ img.platform-logo {
 
 .title-details{
      margin: 30px;
+  
 }
 .title-content { 
-    display: flex;
-    flex-direction: column;
     color: black;
     cursor: default;
    
@@ -114,7 +114,7 @@ img.platform-logo {
 
 .home-page .form-submit {
     height: 50px;
-    border: 1px solid black;
+    border: 1px solid white;
     border-left: 0;
     border-radius: 0 10px 10px 0;
     padding: 10px;
@@ -125,7 +125,7 @@ img.platform-logo {
     width: 400px;
     margin: 50px 0;
     padding: 15px;
-    border: 1px solid black;
+    border: 1px solid white;
     border-right: 0;
     border-radius: 10px 0 0 10px;
     font-size: 36px;
@@ -135,6 +135,7 @@ img.platform-logo {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 20px;
 }
 
 .result-page {
@@ -150,9 +151,9 @@ img.platform-logo {
 
 .result-page .form-input {
     font-size: 22px;
-    width: 300px;
+    width: 500px;
     height: 40px;
-    border: 1px solid black;
+    border: 1px solid white;
     border-right: 0;
     border-radius: 10px 0 0 10px;
     padding: 10px;
@@ -165,7 +166,7 @@ input:focus {
 .result-page .form-submit {
     height: 40px;
     background-color: white;
-    border: 1px solid black;
+    border: 1px solid white;
     border-left: 0;
     border-radius: 0 10px 10px 0;
     padding: 10px;
@@ -174,20 +175,28 @@ input:focus {
 .result-page .logo {
     height: 50px;
     margin: 0 20px;
+    cursor: pointer;
 }
 .result-title { 
     text-align: center;
+    font-family: 'Muli', sans-serif;
 }
 
 .list-title {
     margin: 0 15px 20px;
     font-size: 32px;
+    
 }
 
 .list-description {
     margin: 0 15px;
     font-size: 20px;
     line-height: 32px;
+    font-family: 'Abel', sans-serif;
+}
+
+.list-container {
+    margin: 20px;
 }
 .similar-submit {
     border: none;
@@ -205,9 +214,77 @@ input:focus {
 }
 
 .inner-color-text {
-    color: white;
+    color: #ffffff90;
     background: none;
     border: none;
     margin-top: 170px;
     text-align: center;
+    font-size: 1vw;
+}
+
+@media only screen and (max-width: 1000px) {
+    /* body {
+        overflow: hidden;
+    } */
+    .modal {
+        background-color: white;
+    }
+    .modal-content {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .title-details {
+        margin: 30px;
+    }
+    .modal > .result-li {
+       display: inline; 
+    }
+    .close {
+        float: right;
+        margin: 20px;
+        position: fixed;
+        right: 10px;
+        top: 0;
+    }
+    .modal > .result-li > img {
+        float: left;
+        margin: 30px;
+    }
+    .color-palette {
+        clear: both;
+    }
+    .similar-submit {
+        display: block;
+        margin: 20px auto;
+    }
+    .home-page .form-input {
+        width: 60%;
+    }
+    
+    .home-page .logo {
+        width: 65%;
+        height: auto;
+    }
+    .result-page .form-input {
+        height: 30px;
+        width: 150px;
+    }
+    .result-page .form-submit {
+        height: 30px;
+        padding: 5px;
+    }
+    .result-page .logo {
+        height: 40px;
+        margin: 0 10px;
+    }
+    .inner-color-text {
+        font-size: 18px;
+    }
+    
+}
+@media only screen and (max-width: 500px) {
+    .inner-color-text{
+    font-size: 10px;
+    }
 }

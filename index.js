@@ -23,6 +23,7 @@ function watchForm(){
         $('form').parent('section').addClass('result-page');
     })
 }
+
 function makeFullUrl(params) {
     const queryItems = Object.keys(params)
     .map(key => `${encodeURIComponent(key)}=${params[encodeURIComponent(key)]}`)
@@ -50,7 +51,6 @@ function getTitles(userInput){
 }
 
 function displaySearch(responseJson){
-    console.log(responseJson);
     $('.ul-results').empty();
     if (responseJson.results.length === 0){
         $('.ul-results').text('Title not found, check spelling and try again.')
@@ -94,14 +94,15 @@ function watchResults(){
             $('.selected > .title-content > .title-details').removeClass('hidden');
             $(this).wrap('<div class="modal"></div>');
             $(this).parent('div').siblings('h2').addClass('hidden');
+            $('body').attr('style', 'overflow: hidden');
             $('.selected > .close').removeClass('hidden');
             getColors();
             console.log(this)
             const currentSelect = $('.selected').attr('id');
             $('.close' ).on('click', function(){
             close(currentSelect); });
-            $('.body' ).not('.selected').on('click', function(){
-                close(currentSelect); });
+            // $('.body' ).not('.selected').on('click', function(){
+            //     close(currentSelect); });
         }
     
         const titleId = $(this).attr('id');
@@ -109,24 +110,29 @@ function watchResults(){
           e.preventDefault();
           $('form').parent('section').removeClass('home-page');
           $('form').parent('section').addClass('result-page');
+          $('body').attr('style', 'overflow: auto');
           getSimilar(titleId);  
         })
-            // watchResults();
+        $('.logo').on('click', function(){
+            $('form').parent('section').removeClass('result-page');
+            $('form').parent('section').addClass('home-page');
+            getTrending(); 
+        })
+          
 
     })
 }
 
 function close(currentSelect){
-    // $('.result-li').off('click');
     $(`#${currentSelect}`).one('click', function(){
     $(`#${currentSelect}`).unwrap('.modal');
     $(`#${currentSelect}`).removeClass('modal-content');
     $(`#${currentSelect}`).siblings('h2').removeClass('hidden');
-    // $('.title-content').addClass('hidden');
     $('.title-details').addClass('hidden');
     $('.close').addClass('hidden');
     $('.color-palette-item').addClass('hidden');
     $(`#${currentSelect}`).removeClass('selected');
+    $('body').attr('style', 'overflow: auto');
     watchResults();
 })
 }
