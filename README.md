@@ -1,6 +1,8 @@
 # Movie Palette
 A program to search and discover color palettes based off movies.
-
+  
+Check out the [Live Demo](https://izaacabrams.github.io/movie-palette/).
+  
 Concept
 -------
 Color palettes can be enjoyable to look at, but also useful in a few different fields.
@@ -29,3 +31,4 @@ Screenshots
 **Result Page**
   
 ![Result-page](https://github.com/izaacAbrams/movie-palette/blob/master/images/result-screenshot.PNG "Result Screenshot")
+
