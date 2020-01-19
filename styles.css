@@ -78,6 +78,7 @@ body {
     border-radius: 20px;
     width: 80%; 
     overflow: auto;
+    transition: 1s;
 
 }
 .close {

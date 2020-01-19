@@ -19,7 +19,6 @@ function watchForm(){
     $('form').submit(e => {
         e.preventDefault();
         let userInput = $('.form-input').val();
-        console.log(userInput);
         getTitles(userInput);
         $('form').parent('section').removeClass('home-page');
         $('form').parent('section').addClass('result-page');
